@@ -1,4 +1,6 @@
-function registerHandlers (hideOnLoad) {
+var openScenario
+
+function registerHandlers(hideOnLoad) {
   var isAnyScenarioOpen = false
 
   var body = document.getElementsByTagName('body')[0]
@@ -17,11 +19,27 @@ function registerHandlers (hideOnLoad) {
 
   toolBar.style.display = 'none'
 
-  function scenarioOpened () {
+  function addDragDrop() {
+    var imageSetContainers = Array.from(document.querySelectorAll('.image-set-images'))
+
+    var draggableImageSets = dragula({
+      containers: imageSetContainers,
+      direction: 'horizontal'
+    })
+
+    draggableImageSets.on('drop', function (e) {
+      var imageSet = e.parentElement
+      var title = imageSet.parentElement.querySelector('.image-set-title')
+      handleImageOrderChange(imageSet, title)
+    })
+  }
+
+  function scenarioOpened() {
     isAnyScenarioOpen = true
     openAll.style.display = 'none'
     closeAll.style.display = 'inline'
     toolBar.style.display = 'block'
+    addDragDrop()
   }
 
   function allScenariosClosed () {
@@ -34,14 +52,16 @@ function registerHandlers (hideOnLoad) {
 
   function closeScenario (scenarioElement) {
     scenarioElement.nextElementSibling.style.display = 'none'
+    scenarioElement.nextElementSibling.classList.remove('open')
 
     if (!areImageSetsOpen()) {
       allScenariosClosed()
     }
   }
 
-  function openScenario (scenarioElement) {
+  openScenario = function openScenario (scenarioElement) {
     scenarioElement.nextElementSibling.style.display = 'block'
+    scenarioElement.nextElementSibling.classList.add('open')
     scenarioOpened()
   }
 
@@ -188,8 +208,8 @@ function registerHandlers (hideOnLoad) {
   loopAllImages()
 
   if (hideOnLoad) {
-    loopImageSets()
     loopImageSetTitles()
+    loopImageSets()
   }
 }
 
@@ -252,6 +272,10 @@ function reapplyImageZoom (caption, title) {
   activeImageElement.classList.add('zoomed-in')
 }
 
+function formatTitle(title) {
+  return title.replace(/\d+\.\s/g, "")
+}
+
 function getNoteDetails () {
   var path = document.querySelector('.image.zoomed-in .path').innerText
   var userJourneyTitle = document.querySelector('.image.zoomed-in .journey').innerText
@@ -287,4 +311,42 @@ window.handleEditNoteClick = function () {
   editButton.style.display = 'none'
   input.style.display = 'block'
   saveButton.style.display = 'block'
+}
+function handleImageOrderChange(imageSet, title) {
+  var serviceName = window.location.pathname.replace('/service/', '').replace('/index.html', '')
+  var images = Array.from(imageSet.querySelectorAll('.image')).map(function (image) {
+    var note = image.querySelector('.note .note-display')
+
+    return {
+      caption: image.querySelector('.image-title .path').innerText,
+      imgref: image.querySelector('.image-wrapper img').getAttribute('src'),
+      note: note ? note.innerText : ''
+    }
+  })
+
+  var request = {
+    images: images,
+    serviceName: serviceName,
+    scenarioName: formatTitle(title.innerText)
+  }
+
+  fetch('/save-images', {
+    method: 'POST',
+    body: JSON.stringify(request),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  }).then(function (response) {
+    return response.json()
+  }).then(function (data) {
+    applyData(data)
+  }).then(function () {
+    var imageSets = Array.from(document.querySelectorAll('.image-set-title'))
+    var activeImageSet = imageSets.find(function (imageSet) {
+      return imageSet.innerText === title.innerText
+    })
+
+    registerHandlers(true)
+    openScenario(activeImageSet)
+  })
 }
