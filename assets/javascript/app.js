@@ -16,6 +16,7 @@ function registerHandlers(hideOnLoad) {
   var images = document.getElementsByClassName('image')
   var imagesSet = document.getElementsByClassName('image-set-images')
   var imageSetTitles = document.getElementsByClassName('image-set-title')
+  var editButtons = document.querySelectorAll('.note-edit-button')
 
   toolBar.style.display = 'none'
 
@@ -181,6 +182,23 @@ function registerHandlers(hideOnLoad) {
     return false
   }
 
+  function handleEditNoteClick (event) {
+    var editButton = event.target
+    var note = editButton.parentNode
+    var input = note.querySelector('.note-input')
+    var noteDisplay = note.querySelector('.note-display')
+    var saveButton = note.querySelector('.note-save-button')
+
+    if (noteDisplay) {
+      noteDisplay.style.display = 'none'
+    }
+
+    editButton.style.display = 'none'
+    input.style.display = 'block'
+    saveButton.style.display = 'block'
+  }
+
+
   // Toggle the image sets
   allToggle.onclick = function () {
     if (isAnyScenarioOpen) {
@@ -203,6 +221,10 @@ function registerHandlers(hideOnLoad) {
   rangeInput.oninput = function () {
     updateSlider(rangeInput.value)
   }
+
+  editButtons.forEach(function (editButton) {
+    editButton.addEventListener('click', handleEditNoteClick)
+  })
 
   // Run functions
   loopAllImages()
@@ -299,19 +321,6 @@ function getNoteDetails () {
   }
 }
 
-window.handleEditNoteClick = function () {
-  var editButton = document.querySelector('.image.zoomed-in .note-edit-button')
-  var input = document.querySelector('.image.zoomed-in .note-input')
-  var noteDisplay = document.querySelector('.image.zoomed-in .note-display')
-  var saveButton = document.querySelector('.image.zoomed-in .note-save-button')
-
-  if (noteDisplay) {
-    noteDisplay.style.display = 'none'
-  }
-  editButton.style.display = 'none'
-  input.style.display = 'block'
-  saveButton.style.display = 'block'
-}
 function handleImageOrderChange(imageSet, title) {
   var serviceName = window.location.pathname.replace('/service/', '').replace('/index.html', '')
   var images = Array.from(imageSet.querySelectorAll('.image')).map(function (image) {
