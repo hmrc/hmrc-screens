@@ -17,6 +17,7 @@ function registerHandlers(hideOnLoad) {
   var imagesSet = document.getElementsByClassName('image-set-images')
   var imageSetTitles = document.getElementsByClassName('image-set-title')
   var editButtons = document.querySelectorAll('.note-edit-button')
+  var saveButtons = document.querySelectorAll('.note-save-button')
 
   toolBar.style.display = 'none'
 
@@ -198,6 +199,24 @@ function registerHandlers(hideOnLoad) {
     saveButton.style.display = 'block'
   }
 
+  function handleSaveNoteClick () {
+    var noteContent = getNoteDetails()
+
+    window.fetch('/save-note', {
+      method: 'POST',
+      body: JSON.stringify(noteContent),
+      headers: new window.Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(function (response) {
+      return response.json()
+    }).then(function (data) {
+      applyData(data)
+    }).then(function () {
+      reapplyImageZoom(noteContent.path.caption, noteContent.userJourney.title)
+      registerHandlers(false)
+    })
+  }
 
   // Toggle the image sets
   allToggle.onclick = function () {
@@ -224,6 +243,10 @@ function registerHandlers(hideOnLoad) {
 
   editButtons.forEach(function (editButton) {
     editButton.addEventListener('click', handleEditNoteClick)
+  })
+
+  saveButtons.forEach(function (saveButton) {
+    saveButton.addEventListener('click', handleSaveNoteClick)
   })
 
   // Run functions
@@ -259,25 +282,6 @@ function applyData (data) {
 }
 
 applyData(window.data)
-
-window.handleSaveNoteClick = function () {
-  var body = getNoteDetails()
-
-  window.fetch('/save-note', {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: new window.Headers({
-      'Content-Type': 'application/json'
-    })
-  }).then(function (response) {
-    return response.json()
-  }).then(function (data) {
-    applyData(data)
-  }).then(function () {
-    reapplyImageZoom(body.path.caption, body.userJourney.title)
-    registerHandlers(false)
-  })
-}
 
 function reapplyImageZoom (caption, title) {
   var activeJourneyElement = Array.from(document.querySelectorAll('.image-set-title')).find(function (el) {
