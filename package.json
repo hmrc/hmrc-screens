@@ -31,6 +31,7 @@
     "body-parser": "^1.17.2",
     "cheerio": "^1.0.0-rc.1",
     "colors": "^1.1.2",
+    "dragula": "^3.7.2",
     "express": "^4.15.3",
     "inquirer": "^3.0.6"
   },

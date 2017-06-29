@@ -13,8 +13,8 @@ test('save new note to existing data file', function (t) {
 
   var noteInfo = {
     path: {
-      caption: 'account overview',
-      imgref: 'images/test-scenario/01-account-overview.png',
+      caption: 'Laptop with HiDPI screen',
+      imgref: 'images/test-scenario/01-Laptop-with-HiDPI-screen.png',
       note: 'old-note'
     },
     note: 'new note',
@@ -22,8 +22,8 @@ test('save new note to existing data file', function (t) {
     userJourney: {
       title: 'test scenario',
       path: [{
-        caption: 'account overview',
-        imgref: 'images/test-scenario/01-account-overview.png',
+        caption: 'Laptop with HiDPI screen',
+        imgref: 'images/test-scenario/01-Laptop-with-HiDPI-screen.png',
         note: 'old-note'
       }]
     }
