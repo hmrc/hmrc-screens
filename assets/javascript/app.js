@@ -183,6 +183,44 @@ function registerHandlers(hideOnLoad) {
     return false
   }
 
+  function reapplyImageZoom (caption, title) {
+    var activeJourneyElement = Array.from(document.querySelectorAll('.image-set-title')).find(function (el) {
+      // remove any leading numbers that match the format (1. ) incl. space
+      return el.innerText.replace(/\d+\.\s/g, '') === title
+    })
+
+    var activeImageElement = Array.from(activeJourneyElement.parentElement.querySelectorAll('.image')).find(function (el) {
+      return el.querySelector('.image-title .path').innerText === caption
+    })
+
+    // loop through image sets, to their titles, match against edited from getNoteDetails()
+    activeImageElement.parentElement.style.display = 'block'
+    activeImageElement.classList.add('zoomed-in')
+  }
+
+  function getNoteDetails () {
+    var path = document.querySelector('.image.zoomed-in .path').innerText
+    var userJourneyTitle = document.querySelector('.image.zoomed-in .journey').innerText
+    var note = document.querySelector('.image.zoomed-in .note-input').value
+    // reliably get the service name in the exact format of the folder name
+    var serviceName = window.location.pathname.replace('/service/', '').replace('/index.html', '')
+
+    var activeUserJourney = window.data.userjourneys.find(function (userJourney) {
+      return userJourney.title === userJourneyTitle
+    })
+
+    var activePath = activeUserJourney.path.find(function (pathItem) {
+      return pathItem.caption === path
+    })
+
+    return {
+      path: activePath,
+      note: note,
+      serviceName: serviceName,
+      userJourney: activeUserJourney
+    }
+  }
+
   function handleEditNoteClick (event) {
     var editButton = event.target
     var note = editButton.parentNode
@@ -258,9 +296,10 @@ function registerHandlers(hideOnLoad) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  registerHandlers(true)
-})
+function applyData (data) {
+  var template = document.getElementById('template').innerHTML
+  document.getElementById('content').innerHTML = window.Handlebars.compile(template)(data)
+}
 
 window.Handlebars.registerHelper('math', function (lvalue, operator, rvalue, options) {
   lvalue = parseFloat(lvalue)
@@ -275,54 +314,8 @@ window.Handlebars.registerHelper('math', function (lvalue, operator, rvalue, opt
   }[operator]
 })
 
-var template = document.getElementById('template').innerHTML
-
-function applyData (data) {
-  document.getElementById('content').innerHTML = window.Handlebars.compile(template)(data)
-}
-
-applyData(window.data)
-
-function reapplyImageZoom (caption, title) {
-  var activeJourneyElement = Array.from(document.querySelectorAll('.image-set-title')).find(function (el) {
-    // remove any leading numbers that match the format (1. ) incl. space
-    return el.innerText.replace(/\d+\.\s/g, '') === title
-  })
-
-  var activeImageElement = Array.from(activeJourneyElement.parentElement.querySelectorAll('.image')).find(function (el) {
-    return el.querySelector('.image-title .path').innerText === caption
-  })
-
-  // loop through image sets, to their titles, match against edited from getNoteDetails()
-  activeImageElement.parentElement.style.display = 'block'
-  activeImageElement.classList.add('zoomed-in')
-}
-
 function formatTitle(title) {
   return title.replace(/\d+\.\s/g, "")
-}
-
-function getNoteDetails () {
-  var path = document.querySelector('.image.zoomed-in .path').innerText
-  var userJourneyTitle = document.querySelector('.image.zoomed-in .journey').innerText
-  var note = document.querySelector('.image.zoomed-in .note-input').value
-  // reliably get the service name in the exact format of the folder name
-  var serviceName = window.location.pathname.replace('/service/', '').replace('/index.html', '')
-
-  var activeUserJourney = window.data.userjourneys.find(function (userJourney) {
-    return userJourney.title === userJourneyTitle
-  })
-
-  var activePath = activeUserJourney.path.find(function (pathItem) {
-    return pathItem.caption === path
-  })
-
-  return {
-    path: activePath,
-    note: note,
-    serviceName: serviceName,
-    userJourney: activeUserJourney
-  }
 }
 
 function handleImageOrderChange(imageSet, title) {
@@ -363,3 +356,8 @@ function handleImageOrderChange(imageSet, title) {
     openScenario(activeImageSet)
   })
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  applyData(window.data)
+  registerHandlers(true)
+})
