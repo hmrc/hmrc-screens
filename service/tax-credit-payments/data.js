@@ -3,7 +3,7 @@ var data = {
   "last-updated": "12th September 2017",
   "userjourneys": [
     {
-      "title": "ctc weekly",
+      "title": "User gets Child Tax Credit every week",
       "path": [
         {
           "caption": "tax credit summary",
@@ -18,7 +18,7 @@ var data = {
       ]
     },
     {
-      "title": "wtc weekly",
+      "title": "User gets Working Tax Credit every week",
       "path": [
         {
           "caption": "tax credit summary",
@@ -33,11 +33,11 @@ var data = {
       ]
     },
     {
-      "title": "ctc 4 weekly",
+      "title": "User gets Child Tax Credit every 4 weeks",
       "path": []
     },
     {
-      "title": "wtc ctc weekly",
+      "title": "User gets Working Tax Credit and Child Tax Credit every week",
       "path": [
         {
           "caption": "tax credit summary",
@@ -52,7 +52,7 @@ var data = {
       ]
     },
     {
-      "title": "wtc ctc 4 weekly",
+      "title": "User gets Working Tax Credit and Child Tax Credit every 4 weeks",
       "path": [
         {
           "caption": "tax credit summary",
@@ -67,7 +67,7 @@ var data = {
       ]
     },
     {
-      "title": "wtc weekly ctc 4 weekly",
+      "title": "User gets Working Tax Credit every week and Child Tax Credit every 4 weeks",
       "path": [
         {
           "caption": "tax credit summary",
@@ -82,7 +82,7 @@ var data = {
       ]
     },
     {
-      "title": "multiple payments same day",
+      "title": "User gets multiple payments on the same day",
       "path": [
         {
           "caption": "tax credit summary",
@@ -97,7 +97,7 @@ var data = {
       ]
     },
     {
-      "title": "wtc stopping",
+      "title": "Working Tax Credit payments are stopping",
       "path": [
         {
           "caption": "tax credit summary",
@@ -112,22 +112,23 @@ var data = {
       ]
     },
     {
-      "title": "ftnae with payments",
+      "title": "User has a child that is staying on or changing education (FTNAE) and has payments",
       "path": [
-        {
-          "caption": "payments",
-          "imgref": "images/ftnae-with-payments/01-payments.png",
-          "note": "Notes go here..."
-        },
         {
           "caption": "tax credit summary",
           "imgref": "images/ftnae-with-payments/02-tax-credit-summary.png",
           "note": "Notes go here..."
         }
+        {
+          "caption": "payments",
+          "imgref": "images/ftnae-with-payments/01-payments.png",
+          "note": "Notes go here..."
+        },
+        
       ]
     },
     {
-      "title": "ftnae no payments pre september",
+      "title": "User has a child that is staying on or changing education (FTNAE) and has no payments - before 1 September",
       "path": [
         {
           "caption": "tax credit summary",
@@ -137,7 +138,7 @@ var data = {
       ]
     },
     {
-      "title": "ftnae no payments post september",
+      "title": "User has a child that is staying on or changing education (FTNAE) and has no payments - from 1 to 7 September",
       "path": [
         {
           "caption": "tax credit summary",
@@ -147,7 +148,7 @@ var data = {
       ]
     },
     {
-      "title": "help us improve survey",
+      "title": "Help us improve survey",
       "path": [
         {
           "caption": "page useful",
