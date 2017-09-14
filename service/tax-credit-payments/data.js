@@ -32,10 +32,7 @@ var data = {
         }
       ]
     },
-    {
-      "title": "User gets Child Tax Credit every 4 weeks",
-      "path": []
-    },
+    
     {
       "title": "User gets Working Tax Credit and Child Tax Credit every week",
       "path": [
