@@ -1,6 +1,6 @@
 var data = {
   "service": "Tax credit payments",
-  "last-updated": "12th September 2017",
+  "last-updated": "12 September 2017",
   "userjourneys": [
     {
       "title": "User gets Child Tax Credit every week",
@@ -118,7 +118,7 @@ var data = {
           "caption": "tax credit summary",
           "imgref": "images/ftnae-with-payments/02-tax-credit-summary.png",
           "note": "Notes go here..."
-        }
+        },
         {
           "caption": "payments",
           "imgref": "images/ftnae-with-payments/01-payments.png",
